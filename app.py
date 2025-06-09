@@ -1,3 +1,6 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU entirely
+
 from flask import Flask, request, jsonify
 from keras.models import load_model
 from keras.preprocessing import image
