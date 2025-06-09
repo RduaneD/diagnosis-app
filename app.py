@@ -26,6 +26,7 @@ label_kelas = {
     9: 'selada_sehat'
 }
 
+# Unduh model jika belum ada
 def download_model():
     if not os.path.exists(MODEL_PATH):
         if not MODEL_ID:
@@ -54,6 +55,14 @@ def generate_advice(label, confidence):
     else:
         return "Tanaman Anda terlihat sehat, lanjutkan perawatan seperti biasa." if "sehat" in label else "Tanaman Anda kemungkinan sakit. Periksa gejala lebih lanjut dan lakukan perawatan segera."
 
+# 🔹 Endpoint untuk cek apakah server hidup
+@app.route('/')
+def index():
+    return jsonify({
+        "message": "API Diagnosis Tanaman aktif. Gunakan POST /api/diagnosis dengan gambar."
+    })
+
+# 🔹 Endpoint diagnosis tanaman
 @app.route("/api/diagnosis", methods=["POST"])
 def api_diagnosis():
     if 'my_image' not in request.files:
@@ -85,4 +94,5 @@ def api_diagnosis():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
